@@ -57,3 +57,7 @@ print(prompt)
 greedy_outputs = model.generate(prompt)
 # generate translation output using greedy search
 print(tokenizer.decode(greedy_outputs[0], skip_special_tokens=True))
+
+beam_outputs = model.generate(prompt, num_beams=3)
+# generate translation outpput using beam search
+print(tokenizer.decode(beam_outputs[0], skip_special_tokens=True))
