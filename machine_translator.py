@@ -61,3 +61,18 @@ print(tokenizer.decode(greedy_outputs[0], skip_special_tokens=True))
 beam_outputs = model.generate(prompt, num_beams=3)
 # generate translation outpput using beam search
 print(tokenizer.decode(beam_outputs[0], skip_special_tokens=True))
+
+text = "Hello World!"
+inputs = tokenizer.encode(text, return_tensors="pt", max_length=512, truncation=True)
+beam_outputs = model.generate(
+    inputs,
+    num_beams=5,
+    num_return_sequences=5,
+    early_stopping=True,
+)
+# this will use 5 beams and return 5 sequences to compare translation.
+
+for i, beam_output in enumerate(beam_outputs):
+  # use for loop to print each version of translation and separate them with "=".
+  print(tokenizer.decode(beam_output, skip_special_tokens=True))
+  print("="*50)
