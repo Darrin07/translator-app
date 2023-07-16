@@ -29,3 +29,31 @@ His intellectual achievements and originality resulted in "Einstein" becoming
 synonymous with "genius"
 """
 print(translator(article)[0]["translation_text"])
+
+def get_model_and_tokenizer(src_lang, dst_lang):
+    """
+    With the source and destination laguages, return the appropriate model and
+    tokenizer
+    :param src_lang: original source language
+    :param dst_lang: destination language that source is translated to.
+    :return: model, tokenizer
+    """
+    model_name = f"Helsinki-NLP/opus-mt-{src}-{dst}"
+    # construct model name
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+    return model, tokenizer
+
+# source & destination languages
+src = "en"
+dst = "zh"
+
+model, tokenizer = get_model_and_tokenizer(src, dst)
+
+prompt = tokenizer.encode(article, return_tensors="pt", max_length=512, truncation=True)
+# encode text into tensor using tokenizer
+print(prompt)
+
+greedy_outputs = model.generate(prompt)
+# generate translation output using greedy search
+print(tokenizer.decode(greedy_outputs[0], skip_special_tokens=True))
